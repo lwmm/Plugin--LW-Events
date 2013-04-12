@@ -1,0 +1,200 @@
+<style>
+    .add, .back {
+        border-bottom:1px dotted #627D90;
+        padding-bottom:10px;
+    }
+
+    .back{margin-bottom: 20px;}
+
+    .button_menu{
+        height: 10px;
+        padding-top: 10px;
+    }
+    .button_menu a.menu, .add a.menu, #paging a.menu, #yearSelector a.menu, .back a.menu{
+        padding: 0 10px;
+        background-color: #F57912;
+        color: #FFF;
+        margin-left: 5px;
+    }
+
+    .button_menu a.menu {float: right;}
+
+    #paging{
+        margin-top:20px;
+        margin-bottom: 10px;
+    }
+
+    #paging a.page{
+        border:1px solid #134B7C;
+        color:black;width:20px;
+        text-align:center;
+        background-color:#D9DFE4;
+        display:block;float:left;
+        margin-right:3px;
+        margin-bottom:3px;
+        width: 30px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+
+    #paging .clearer{
+        height:10px;
+        width:10px;
+        float:left;
+    }
+
+    #yearselector{height: 60px;}
+
+    #yearselector #submit{
+        padding: 2px 10px;
+        background-color: #F57912;
+        color: #FFF;
+        margin-left: 5px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .clearfix:after {
+        content: ".";
+        display: block;
+        clear: both;
+        visibility: hidden;
+        line-height: 0;
+        height: 0;
+    }
+</style>
+<div class="back"  >
+    <a class="menu" href="<?php echo $this->baseUrl ?>"><?php
+        if ($this->lang == "en") {
+            $back = "back";
+        }
+        else {
+            $back = "zur&uuml;ck";
+        }
+        echo $back;
+        ?></a>
+</div>
+<div id="yearselector" class="add">
+    <h2><?php
+        if ($this->lang == "en") {
+            $selectYear = "Please choose the year:";
+        }
+        else {
+            $selectYear = "Bitte das Jahr ausw&auml;hlen:";
+        }
+        echo $selectYear;
+        ?></h2>
+
+    <form action="<?php echo $this->baseUrl . "&show=archive" ?>" method="POST">
+        <select id="year" name="year">
+            <?php foreach ($this->years as $year): ?>
+                <option value="<?php echo $year["opt3number"] ?>" <?php if ($this->selectedYear == $year["opt3number"]): ?> selected="selected" <?php endif; ?> ><?php echo $year["opt3number"] ?></option>
+            <?php endforeach; ?>
+        </select>
+
+        <input type="submit" id="submit" value="<?php
+        if ($this->lang == "en") {
+            $go = "show";
+        }
+        else {
+            $go = "anzeigen";
+        }
+        echo $go;
+        ?>">
+    </form>
+</div>
+
+<?php if (!empty($this->data)) : ?>
+    <?php foreach ($this->data as $entry) : ?>
+        <div class="news_item">
+            <?php if ($this->admin) : ?>
+                <div class="button_menu">
+                    <a class="menu" href="<?php echo $this->baseUrl . "/#" ?>" onclick="if (confirm('Diesen Eintrag wirklich l&ouml;schen ?')) {
+                                            self.location.href = '<?php echo $this->baseUrl . "&delete=" . $entry["id"] ?>';
+                                            return false;
+                                        }" >l&ouml;schen</a>
+                    <a class="menu" href="<?php echo $this->baseUrl . "&show=form&cmd=edit&id=" . $entry["id"] ?>">bearbeiten</a>
+                </div>
+            <?php endif; ?>
+            <div style="margin-top:10px;color:#627D90;">
+                <?php
+                $year = substr($entry['opt2number'], 0, 4);
+                $month = substr($entry['opt2number'], 4, 2);
+                $day = substr($entry['opt2number'], 6, 2);
+
+                $date2 = "";
+                if ($entry["opt4number"] != $entry["opt2number"]) {
+                    $year2 = substr($entry['opt4number'], 0, 4);
+                    $month2 = substr($entry['opt4number'], 4, 2);
+                    $day2 = substr($entry['opt4number'], 6, 2);
+
+                    $date2 = ' - ' . $day2 . '.' . $month2 . '.' . $year2;
+                }
+                echo $day . '.' . $month . '.' . $year . $date2;
+                ?>
+            </div>
+
+            <h1><?php echo $entry["opt1text"] ?></h1>
+
+            <h2><?php echo $entry["opt2text"] ?></h2>
+
+            <div style="border-bottom:1px dotted #627D90;padding-bottom:10px;">
+                <p>
+                    <?php
+                    if (!empty($entry["opt1number"])) {
+                        if ($this->lang == "en") {
+                            $more = "more";
+                        }
+                        else {
+                            $more = "mehr";
+                        }
+
+                        echo "...[<a href=\"" . $this->baseUrlWithoutIndex . $entry["opt1number"] . "\">" . $more . "</a>]";
+                    }
+
+                    if (!empty($entry["opt1clob"])) {
+                        $str = "";
+                        if ($this->lang == "en") {
+                            $more = "more";
+                        }
+                        else {
+                            $more = "mehr";
+                        }
+                        if (strlen($entry["opt1clob"]) > 250) {
+                            $str = substr($entry["opt1clob"], 0, 250);
+                        }
+                        else {
+                            echo $entry["opt1clob"];
+                        }
+                        echo $str . "...[<a href=\"" . $this->baseUrl . "&show=detail&id=" . $entry["id"] . "\">" . $more . "</a>]";
+                    }
+                    ?></p>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php else : ?>
+    <div class="news_item">
+        <div class="button_menu">
+            <p><?php
+                if ($this->lang == "en") {
+                    $out = "no entries available";
+                }
+                else {
+                    $out = "keine Eintr&auml;ge vorhanden";
+                }
+                echo $out;
+                ?></p>
+        </div>
+    </div>
+<?php endif; ?>
+<div id="paging">
+    <a class="menu" href="<?php echo $this->baseUrl ?>"><?php
+        if ($this->lang == "en") {
+            $back = "back";
+        }
+        else {
+            $back = "zur&uuml;ck";
+        }
+        echo $back;
+        ?></a>
+</div>

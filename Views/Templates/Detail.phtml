@@ -1,0 +1,51 @@
+<style>
+    .back {
+        border-bottom:1px dotted #627D90;
+        padding-bottom:10px;
+        height: 10px;
+    }
+
+    .back a.menu{
+        padding: 0 10px;
+        background-color: #F57912;
+        color: #FFF;
+        margin-left: 5px;
+    }
+</style>
+<div  class="back">
+    <a class="menu" href="<?php echo $this->baseUrl ?>"><?php
+        if ($this->lang == "de") {
+            echo "zur&uuml;ck";
+        } if ($this->lang == "en") {
+            echo "back";
+        }
+        ?></a>
+</div>
+
+<div class="news_item">
+    <div style="margin-top:10px;color:#627D90;">
+        <?php
+        $year = substr($this->data['opt2number'], 0, 4);
+        $month = substr($this->data['opt2number'], 4, 2);
+        $day = substr($this->data['opt2number'], 6, 2);
+
+        $date2 = "";
+        if ($this->data["opt4number"] != $this->data["opt2number"]) {
+            $year2 = substr($this->data['opt4number'], 0, 4);
+            $month2 = substr($this->data['opt4number'], 4, 2);
+            $day2 = substr($this->data['opt4number'], 6, 2);
+
+            $date2 = ' - ' . $day2 . '.' . $month2 . '.' . $year2;
+        }
+        echo $day . '.' . $month . '.' . $year . $date2;
+        ?>
+    </div>
+
+    <h1><?php echo $this->data["opt1text"] ?></h1>
+
+    <h2><?php echo $this->data["opt2text"] ?></h2>
+
+    <div style="border-bottom:1px dotted #627D90;padding-bottom:10px;">
+        <p> <?php echo nl2br($this->data["opt1clob"]); ?></p>
+    </div>
+</div>

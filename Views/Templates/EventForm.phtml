@@ -1,0 +1,305 @@
+<script language="javascript" type="text/javascript" src="<?php echo $this->mce ?>"></script>
+<style>
+    #formButtons{
+        margin-top: 20px;
+    }
+
+    .formElement{margin-bottom: 20px;}
+
+    .formElement label{
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    .formElement label span{font-weight: normal;font-size: 10px}
+
+    .formElement .text{width: 95%;}
+
+    .formElement #mainText{height: 350px;}
+
+    .formElement #cmslink{width: 50px;}
+
+    .formElement #datepicker_show,  .formElement #datepicker_show2{width: 80px;}
+
+    #containerCms, #containerMainText, #containerExt{display: none;}
+
+    #entryForm .error{
+        background-color: darkred;
+        color: #fff;
+        padding: 5px;
+        margin-bottom: 10px; 
+        font-size: 15px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 10px;
+        width: 95%;
+    }
+
+    #entryForm .error p{
+        padding: 0;
+        margin: 0; 
+    }
+
+    .datepicker{position: relative;}
+
+    img.ui-datepicker-trigger{
+        position: absolute;
+        top: 17px;
+        left: 90px;
+        cursor:   pointer;
+    }
+
+    #entryForm{position: relative;}
+
+    #dateto{
+        float: left;
+        margin-left: 50px;
+    }
+
+    #entryForm h2{margin: 0;}
+    #entryForm form{margin-top: 30px;}
+    #back a{
+        padding: 0 10px;
+        background-color: #F57912;
+        color: #FFF;
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        var icon = "<?php echo $this->calendaricon ?>";
+
+        $("#datepicker_show").datepicker({
+            altField: "#datepicker",
+            altFormat: "yymmdd",
+            showOn: "button",
+            buttonImage: "<?php echo $this->calendaricon ?>",
+            buttonImageOnly: true
+        });
+        $("#datepicker_show").datepicker("option", "dateFormat", "dd.mm.yy");
+
+        var date = "<?php echo $this->date; ?>";
+        $("#datepicker_show").datepicker("setDate", date);
+
+        $("#datepicker_show2").datepicker({
+            altField: "#datepicker2",
+            altFormat: "yymmdd",
+            showOn: "button",
+            buttonImage: "<?php echo $this->calendaricon ?>",
+            buttonImageOnly: true
+        });
+        $("#datepicker_show2").datepicker("option", "dateFormat", "dd.mm.yy");
+
+        var date2 = "<?php echo $this->date2; ?>";
+        $("#datepicker_show2").datepicker("setDate", date2);
+
+<?php if ($this->formData && $this->formData["pageid"] > 0) : ?>
+            $('#containerCms').show();
+<?php elseif ($this->formData && !empty($this->formData["maintext"])) : ?>
+            $('#containerMainText').show();
+<?php elseif ($this->formData && !empty($this->formData["exturl"])) : ?>
+            $('#containerExt').show();
+<?php else : ?>
+    $('#containerMainText').show();
+<?php endif; ?>
+    });
+
+// Notice: The simple theme does not use all options some of them are limited to the advanced theme
+    tinyMCE.init({
+        mode: "specific_textareas",
+        editor_selector: "mceEditor",
+        theme: "simple",
+        language: "de",
+        content_css: LWResourceUrl + "tinyeditorarea.css",
+        convert_urls: false,
+        relative_urls: false,
+        remove_script_host: false
+    });
+</script>
+
+<div id="entryForm">
+    <h2 style="font-size:20px;"><?php echo $this->formTitle ?></h2>
+    <div id="back">
+        <a href="<?php echo $this->baseUrl . "&show=all" ?>"> zur&uuml;ck</a>
+    </div>
+
+    <form action="<?php echo $this->formAction ?>" method="POST">
+
+        <?php if ($this->errors && array_key_exists("date", $this->errors)) : ?>
+            <?php if (array_key_exists(1, $this->errors["date"])): ?>
+                <div class="error">
+                    <p>Datum ist ein Pflichtfeld.</p>
+                </div>
+            <?php endif; ?>
+            <?php if (array_key_exists(4, $this->errors["date"])): ?>
+                <div class="error">
+                    <p>Es wurde kein korrektes Datum eingegeben.</p>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php if ($this->errors && array_key_exists("date2", $this->errors)) : ?>
+            <?php if (array_key_exists(11, $this->errors["date2"])): ?>
+                <div class="error">
+                    <p>Das Enddatum darf nicht kleiner sein als das Startdatum.</p>
+                </div>
+            <?php endif; ?>
+            <?php if (array_key_exists(4, $this->errors["date2"])): ?>
+                <div class="error">
+                    <p>Es wurde kein korrektes Datum eingegeben.</p>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+        <div>
+            <div class="formElement datepicker" style="float:left">
+                <label  for="datepicker">Datum:<span>(von)</span></label><br>
+                <input id="datepicker_show"  class="text" type="text"  value="">
+                <input id="datepicker"  class="text" type="hidden"  name="news[date]" value="">
+            </div>
+            <div id="dateto" class="formElement datepicker">
+                <label  for="datepicker">Datum:<span>(bis)</span></label><br>
+                <input id="datepicker_show2"  class="text" type="text"  value="">
+                <input id="datepicker2"  class="text" type="hidden"  name="news[date2]" value="">
+            </div>
+        </div>
+        <div style="clear:both;">&nbsp;</div>
+        <?php if ($this->errors && array_key_exists("headline1", $this->errors)) : ?>
+            <?php if (array_key_exists(1, $this->errors["headline1"])): ?>
+                <div class="error">
+                    <p>&Uuml;berschift ist ein Pflichtfeld.</p>
+                </div>
+            <?php endif; ?>
+            <?php if (array_key_exists(2, $this->errors["headline1"])): ?>
+                <div class="error">
+                    <p>Maximale Zeichenl&auml;nge f&uuml;r das Feld &Uuml;berschift betr&auml;gt 255 Zeichen.</p>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+        <div class="formElement" >
+            <label  for="headline1">&Uuml;berschrift:</label><br>
+            <input id="headline1"  class="text" type="text" name="news[headline1]" value="<?php
+            if ($this->formData) {
+                echo $this->formData["headline1"];
+            }
+            ?>">
+        </div>
+
+        <?php if ($this->errors && array_key_exists("place", $this->errors)) : ?>
+            <?php if (array_key_exists(2, $this->errors["place"])): ?>
+                <div class="error">
+                    <p>Maximale Zeichenl&auml;nge f&uuml;r das Feld Ort betr&auml;gt 255 Zeichen.</p>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+        <div class="formElement">
+            <label  for="headline2">Ort:</label><br>
+            <input id="headline2"  class="text" type="text" name="news[place]" value="<?php
+            if ($this->formData) {
+                echo $this->formData["place"];
+            }
+            ?>">
+        </div>
+        <?php if ($this->errors && array_key_exists("maintextANDpageid", $this->errors)) : ?>
+            <?php if (array_key_exists(10, $this->errors["maintextANDpageid"])): ?>
+                <div class="error">
+                    <p>Ein Termin-Typ muss ausgef&uuml;llt werden!</p>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php if ($this->errors && array_key_exists("mainttext", $this->errors)) : ?>
+            <?php if (array_key_exists(2, $this->errors["maintext"])): ?>
+                <div class="error">
+                    <p>Maximale Zeichenl&auml;nge f&uuml;r das Feld Text betr&auml;gt 20 000 Zeichen.</p>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php if ($this->errors && array_key_exists("pageid", $this->errors)) : ?>
+            <?php if (array_key_exists(6, $this->errors["pageid"])): ?>
+                <div class="error">
+                    <p>Die Indexnr. einer Seite darf nur aus Zahlen bestehen.</p>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php if ($this->errors && array_key_exists("exturl", $this->errors)) : ?>
+            <?php if (array_key_exists(2, $this->errors["exturl"])): ?>
+                <div class="error">
+                    <p>Maximale Zeichenl&auml;nge f&uuml;r das Feld Url betr&auml;gt 255 Zeichen.</p>
+                </div>
+            <?php endif; ?>
+            <?php if (array_key_exists(12, $this->errors["exturl"])): ?>
+                <div class="error">
+                    <p>Es wurde keine g&uuml;ltige Url eingeben.</p>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+
+        <div class="formElement">
+            <h2>Bitte Termin-Eingabe w&auml;hlen:</h2>
+
+            <input type="radio" id="typetext"  value="text" name="type" <?php if (!$this->formData || $this->formData && $this->formData["pageid"] == 0 && $this->formData["exturl"] == ""): ?> checked="checked" <?php endif; ?> onclick="
+        $('#containerCms').hide();
+        $('#containerExt').hide();
+        $('#containerMainText').show();">
+            <label  for="typetext" style="font-size:12px;color:#668193" onclick="
+        $('#containerCms').hide();
+        $('#containerExt').hide();
+        $('#containerMainText').show();
+                    ">Texteingabe</label><br>
+
+            <input type="radio" id="typecms"  value="cms" name="type" <?php if ($this->formData && $this->formData["pageid"] > 0 && $this->formData["maintext"] == "" && $this->formData["exturl"] == "") : ?> checked="checked" <?php endif; ?>   onclick="
+        $('#containerMainText').hide();
+        $('#containerExt').hide();
+        $('#containerCms').show();">
+            <label  for="typecms" style="font-size:12px;color:#668193;" onclick="
+        $('#containerMainText').hide();
+        $('#containerExt').hide();
+        $('#containerCms').show();
+                    ">Verweis auf eine CMS-Seite</label><br>
+
+            <input type="radio" id="typeext"  value="ext" name="type" <?php if ($this->formData && $this->formData["pageid"] == 0 && $this->formData["maintext"] == "") : ?> checked="checked" <?php endif; ?>   onclick="
+        $('#containerMainText').hide();
+        $('#containerCms').hide();
+        $('#containerExt').show();
+                   ">
+            <label  for="typeext" style="font-size:12px;color:#668193;" onclick="
+        $('#containerMainText').hide();
+        $('#containerCms').hide();
+        $('#containerExt').show();
+                    ">Verweis auf eine externe Seite</label>
+        </div>
+
+        <div id="containerMainText" class="formElement">
+
+            <label  for="mainText">Text:</label><br>
+            <textarea id="mainText" class="text mceEditor" style="width:100%; height: 350px;" name="news[maintext]"><?php
+                if ($this->formData) {
+                    echo $this->formData["maintext"];
+                }
+                ?></textarea><br>
+        </div>
+
+        <div id="containerCms" class="formElement">
+            <label  for="link">Seiten Id:</label><br>
+            <span>Soll auf eine Seite im CMS verwiesen werden, so ist hier die Indexnr. einzutragen.</span><br>
+            <input id="cmslink"  class="text" type="text" name="news[pageid]" value="<?php
+            if ($this->formData) {
+                echo $this->formData["pageid"];
+            }
+            ?>" >
+        </div>
+
+        <div id="containerExt" class="formElement">
+            <label  for="link">Url:</label><br>
+            <input id="extlink"  class="text" type="text" name="news[exturl]" value="<?php
+            if ($this->formData) {
+                echo $this->formData["exturl"];
+            }
+            ?>" >
+        </div>
+
+        <input type="hidden" name="sent" value="1">
+
+        <div id="formButtons">
+            <input type="submit" value="speichern">
+        </div>
+    </form>
+
+</div>
