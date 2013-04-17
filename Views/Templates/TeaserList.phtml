@@ -182,12 +182,10 @@
                         if (parray[i]['pageid'] > 0) {
                             var url = '<?php echo $this->baseUrlWithoutIndex ?>' + parray[i]['pageid'];
                             var urltype = 'intern';
-                        }
-                        if (String(parray[i]['maintext']).length > 0) {
+                        } else if (String(parray[i]['maintext']) !== "") {
                             var url = '<?php echo $this->baseUrl . "&show=detail&id=" ?>' + parray[i]['id'];
                             var urltype = 'intern';
-                        }
-                        if (String(parray[i]['exturl']).length > 0) {
+                        } else if (String(parray[i]['exturl']) !== "") {
                             var url = parray[i]['exturl'];
                             var urltype = 'extern';
                         }
