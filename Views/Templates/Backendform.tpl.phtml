@@ -55,8 +55,13 @@
         width: 50px;
     }
     #container_plugin_bionrw_news #myform .control-group select{width: 330px;}
+
+    <?php if ($this->teaserview): ?>
+        #teaseroptions{display: block;}
+    <?php else: ?>
+        #teaseroptions{display: none;}
+    <?php endif;?>
     
-    #teaseroptions{display: none;}
 </style>
 
 <fieldset class="lwadminform">
@@ -68,7 +73,7 @@
 
         <br>
         <?php if ($this->noConfigurationSaved): ?>
-            <p>Hinweis : <br>Das Plugin wurde zum ersten mal aufgerufen. Es sind noch keine Einstellungen gespeichert!</p>
+        <p>Hinweis : <br>Das Plugin wurde zum ersten mal aufgerufen. Es sind noch keine Einstellungen gespeichert!</p>
         <?php endif; ?>
         <form id="myform" action="<?php echo $this->actionUrl ?>" method="POST" class="form-horizontal">
 
@@ -87,12 +92,12 @@
                 <label class="control-label" for="teaserview">Teaser-Ansicht verwenden ?</label>
                 <div class="controls">
                     <input type="checkbox" id="teaserview" name="teaserview" value="1"  <?php if ($this->teaserview): ?> checked="checked" <?php endif; ?>  onclick='
-                                if ($("#teaserview").attr("checked")) {
-                                    $("#teaseroptions").slideDown();
-                                }
-                                else {
-                                    $("#teaseroptions").slideUp();
-                                }'>
+        if ($("#teaserview").attr("checked")) {
+            $("#teaseroptions").slideDown();
+        }
+        else {
+            $("#teaseroptions").slideUp();
+        }'>
                 </div>
             </div>
 
