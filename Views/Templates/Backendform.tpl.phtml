@@ -55,6 +55,8 @@
         width: 50px;
     }
     #container_plugin_bionrw_news #myform .control-group select{width: 330px;}
+    
+    #teaseroptions{display: none;}
 </style>
 
 <fieldset class="lwadminform">
@@ -65,8 +67,8 @@
         </div>-->
 
         <br>
-        <?php if($this->noConfigurationSaved): ?>
-        <p>Hinweis : <br>Das Plugin wurde zum ersten mal aufgerufen. Es sind noch keine Einstellungen gespeichert!</p>
+        <?php if ($this->noConfigurationSaved): ?>
+            <p>Hinweis : <br>Das Plugin wurde zum ersten mal aufgerufen. Es sind noch keine Einstellungen gespeichert!</p>
         <?php endif; ?>
         <form id="myform" action="<?php echo $this->actionUrl ?>" method="POST" class="form-horizontal">
 
@@ -84,35 +86,42 @@
             <div class="control-group">
                 <label class="control-label" for="teaserview">Teaser-Ansicht verwenden ?</label>
                 <div class="controls">
-                    <input type="checkbox" id="teaserview" name="teaserview" value="1"  <?php if ($this->teaserview): ?> checked="checked" <?php endif; ?>>
+                    <input type="checkbox" id="teaserview" name="teaserview" value="1"  <?php if ($this->teaserview): ?> checked="checked" <?php endif; ?>  onclick='
+                                if ($("#teaserview").attr("checked")) {
+                                    $("#teaseroptions").slideDown();
+                                }
+                                else {
+                                    $("#teaseroptions").slideUp();
+                                }'>
                 </div>
             </div>
 
-            <div class="control-group">
-                <label class="control-label" for="teaserelements">Anzahl anzuzeigender Elemente in der Teaser-Ansicht </label>
-                <div class="controls">
-                    <select id="teaserelements" name="teaserelements">
-                        <option value="1" <?php if ($this->teaserelements == "1"): ?>selected="selected"<?php endif; ?>>1 Element</option>
-                        <option value="2" <?php if ($this->teaserelements == "2"): ?>selected="selected"<?php endif; ?>>2 Elemente</option>
-                        <option value="3" <?php if ($this->teaserelements == "3"): ?>selected="selected"<?php endif; ?>>3 Elemente</option>
-                        <option value="4" <?php if ($this->teaserelements == "4"): ?>selected="selected"<?php endif; ?>>4 Elemente</option>
-                        <option value="5" <?php if ($this->teaserelements == "5"): ?>selected="selected"<?php endif; ?>>5 Elemente</option>
-                        <option value="6" <?php if ($this->teaserelements == "6"): ?>selected="selected"<?php endif; ?>>6 Elemente</option>
-                        <option value="7" <?php if ($this->teaserelements == "7"): ?>selected="selected"<?php endif; ?>>7 Elemente</option>
-                        <option value="8" <?php if ($this->teaserelements == "8"): ?>selected="selected"<?php endif; ?>>8 Elemente</option>
-                        <option value="9" <?php if ($this->teaserelements == "9"): ?>selected="selected"<?php endif; ?>>9 Elemente</option>
-                        <option value="10" <?php if ($this->teaserelements == "10"): ?>selected="selected"<?php endif; ?>>10 Elemente</option>
-                    </select>
+            <div id="teaseroptions">
+                <div class="control-group">
+                    <label class="control-label" for="teaserelements">Anzahl anzuzeigender Elemente in der Teaser-Ansicht </label>
+                    <div class="controls">
+                        <select id="teaserelements" name="teaserelements">
+                            <option value="1" <?php if ($this->teaserelements == "1"): ?>selected="selected"<?php endif; ?>>1 Element</option>
+                            <option value="2" <?php if ($this->teaserelements == "2"): ?>selected="selected"<?php endif; ?>>2 Elemente</option>
+                            <option value="3" <?php if ($this->teaserelements == "3"): ?>selected="selected"<?php endif; ?>>3 Elemente</option>
+                            <option value="4" <?php if ($this->teaserelements == "4"): ?>selected="selected"<?php endif; ?>>4 Elemente</option>
+                            <option value="5" <?php if ($this->teaserelements == "5"): ?>selected="selected"<?php endif; ?>>5 Elemente</option>
+                            <option value="6" <?php if ($this->teaserelements == "6"): ?>selected="selected"<?php endif; ?>>6 Elemente</option>
+                            <option value="7" <?php if ($this->teaserelements == "7"): ?>selected="selected"<?php endif; ?>>7 Elemente</option>
+                            <option value="8" <?php if ($this->teaserelements == "8"): ?>selected="selected"<?php endif; ?>>8 Elemente</option>
+                            <option value="9" <?php if ($this->teaserelements == "9"): ?>selected="selected"<?php endif; ?>>9 Elemente</option>
+                            <option value="10" <?php if ($this->teaserelements == "10"): ?>selected="selected"<?php endif; ?>>10 Elemente</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="control-group">
-                <label class="control-label" for="teaserview">Kalender verwenden ?</label>
-                <div class="controls">
-                    <input type="checkbox" id="teaserview" name="calendar" value="1"  <?php if ($this->calendar): ?> checked="checked" <?php endif; ?>>
-                </div>
-            </div>
 
+                <div class="control-group">
+                    <label class="control-label" for="teaserview">Kalender verwenden ?</label>
+                    <div class="controls">
+                        <input type="checkbox" id="teaserview" name="calendar" value="1"  <?php if ($this->calendar): ?> checked="checked" <?php endif; ?>>
+                    </div>
+                </div>
+            </div>
             <br>
 
             <div style="margin-top:15px;margin-bottom:20px; margin-left:20px;">
