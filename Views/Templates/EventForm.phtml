@@ -18,10 +18,10 @@
     .formElement #mainText{height: 350px;}
 
     .formElement #cmslink{width: 50px;}
-
+    
     .formElement #datepicker_show,  .formElement #datepicker_show2{width: 80px;}
 
-    #containerCms, #containerMainText, #containerExt{display: none;}
+    #containerCms, #containerMainText, #containerExt, #containerTeasertext{display: none;}
 
     #entryForm .error{
         background-color: darkred;
@@ -93,10 +93,12 @@
         $("#datepicker_show2").datepicker("setDate", date2);
 
 <?php if ($this->formData && $this->formData["pageid"] > 0) : ?>
+            $('#containerTeasertext').show();
             $('#containerCms').show();
 <?php elseif ($this->formData && !empty($this->formData["maintext"])) : ?>
             $('#containerMainText').show();
 <?php elseif ($this->formData && !empty($this->formData["exturl"])) : ?>
+            $('#containerTeasertext').show();
             $('#containerExt').show();
 <?php else : ?>
     $('#containerMainText').show();
@@ -230,6 +232,13 @@
                 </div>
             <?php endif; ?>
         <?php endif; ?>
+        <?php if ($this->errors && array_key_exists("teasertext", $this->errors)) : ?>
+            <?php if (array_key_exists(2, $this->errors["teasertext"])): ?>
+                <div class="error">
+                    <p>Maximale Zeichenl&auml;nge f&uuml;r das Feld Teasertext betr&auml;gt 255 Zeichen.</p>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
 
         <div class="formElement">
             <h2>Bitte Termin-Eingabe w&auml;hlen:</h2>
@@ -237,31 +246,37 @@
             <input type="radio" id="typetext"  value="text" name="type" <?php if (!$this->formData || $this->formData && $this->formData["pageid"] == 0 && $this->formData["exturl"] == ""): ?> checked="checked" <?php endif; ?> onclick="
         $('#containerCms').hide();
         $('#containerExt').hide();
+        $('#containerTeasertext').hide();
         $('#containerMainText').show();">
             <label  for="typetext" style="font-size:12px;color:#668193" onclick="
         $('#containerCms').hide();
         $('#containerExt').hide();
+        $('#containerTeasertext').hide();
         $('#containerMainText').show();
                     ">Texteingabe</label><br>
 
             <input type="radio" id="typecms"  value="cms" name="type" <?php if ($this->formData && $this->formData["pageid"] > 0 && $this->formData["maintext"] == "" && $this->formData["exturl"] == "") : ?> checked="checked" <?php endif; ?>   onclick="
         $('#containerMainText').hide();
         $('#containerExt').hide();
+        $('#containerTeasertext').show();
         $('#containerCms').show();">
             <label  for="typecms" style="font-size:12px;color:#668193;" onclick="
         $('#containerMainText').hide();
         $('#containerExt').hide();
+        $('#containerTeasertext').show();
         $('#containerCms').show();
                     ">Verweis auf eine CMS-Seite</label><br>
 
             <input type="radio" id="typeext"  value="ext" name="type" <?php if ($this->formData && $this->formData["pageid"] == 0 && $this->formData["maintext"] == "") : ?> checked="checked" <?php endif; ?>   onclick="
         $('#containerMainText').hide();
         $('#containerCms').hide();
+        $('#containerTeasertext').show();
         $('#containerExt').show();
                    ">
             <label  for="typeext" style="font-size:12px;color:#668193;" onclick="
         $('#containerMainText').hide();
         $('#containerCms').hide();
+        $('#containerTeasertext').show();
         $('#containerExt').show();
                     ">Verweis auf eine externe Seite</label>
         </div>
@@ -276,6 +291,15 @@
                 ?></textarea><br>
         </div>
 
+        <div id="containerTeasertext" class="formElement">
+            <label  for="link">Teasertext:</label><br>
+            <textarea id="teasertext"  class="text mceEditor" style="width:100%; height: 80px;" type="text" name="news[teasertext]"><?php
+            if ($this->formData) {
+                echo $this->formData["teasertext"];
+            }
+            ?></textarea>
+        </div>
+        
         <div id="containerCms" class="formElement">
             <label  for="link">Seiten Id:</label><br>
             <span>Soll auf eine Seite im CMS verwiesen werden, so ist hier die Indexnr. einzutragen.</span><br>

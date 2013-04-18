@@ -34,12 +34,13 @@ class CommandHandler
         if(empty($array["date2"])) {
             $array["date2"] = $array["date"];
         }
-        $this->db->setStatement("INSERT INTO t:lw_master ( lw_object, language, opt1text, opt2text, opt3text, opt1number, opt2number, opt3number, opt4number, lw_first_date, lw_last_date) VALUES ( :lw_object, :language, :opt1text, :opt2text, :opt3text, :opt1number, :opt2number, :opt3number, :opt4number, :date, :date ) ");
+        $this->db->setStatement("INSERT INTO t:lw_master ( lw_object, language, opt1text, opt2text, opt3text, opt4text, opt1number, opt2number, opt3number, opt4number, lw_first_date, lw_last_date) VALUES ( :lw_object, :language, :opt1text, :opt2text, :opt3text, :opt4text, :opt1number, :opt2number, :opt3number, :opt4number, :date, :date ) ");
         $this->db->bindParameter("lw_object", "s", "lw_events");
         $this->db->bindParameter("language", "s", $array["language"]);
         $this->db->bindParameter("opt1text", "s", $array["headline1"]);
         $this->db->bindParameter("opt2text", "s", $array["place"]);
         $this->db->bindParameter("opt3text", "s", $array["exturl"]);
+        $this->db->bindParameter("opt4text", "s", $array["teasertext"]);
         $this->db->bindParameter("opt1number", "i", $array["pageid"]);
         $this->db->bindParameter("opt2number", "i", $array["date"]);
         $this->db->bindParameter("opt3number", "i", substr($array["date"], 0, 4));
@@ -67,11 +68,12 @@ class CommandHandler
         if(empty($array["date2"])) {
             $array["date2"] = $array["date"];
         }
-        $this->db->setStatement("UPDATE t:lw_master SET opt1text = :opt1text, opt2text = :opt2text, opt3text = :opt3text, opt1number = :opt1number, opt2number = :opt2number, opt3number = :opt3number, opt4number = :opt4number, lw_last_date = :date  WHERE id = :id ");
+        $this->db->setStatement("UPDATE t:lw_master SET opt1text = :opt1text, opt2text = :opt2text, opt3text = :opt3text, opt4text = :opt4text, opt1number = :opt1number, opt2number = :opt2number, opt3number = :opt3number, opt4number = :opt4number, lw_last_date = :date  WHERE id = :id ");
         $this->db->bindParameter("id", "i", $id);
         $this->db->bindParameter("opt1text", "s", $array["headline1"]);
         $this->db->bindParameter("opt2text", "s", $array["place"]);
         $this->db->bindParameter("opt3text", "s", $array["exturl"]);
+        $this->db->bindParameter("opt4text", "s", $array["teasertext"]);
         $this->db->bindParameter("opt1number", "i", $array["pageid"]);
         $this->db->bindParameter("opt2number", "i", $array["date"]);
         $this->db->bindParameter("opt3number", "i", substr($array["date"], 0, 4));
