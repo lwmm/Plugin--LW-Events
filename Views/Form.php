@@ -27,8 +27,11 @@ class Form
         else {
             if (array_key_exists("notvalid", $data)) {
                 $temp = $data["c_media"];
+                $tempOid = $data["oid"];
                 $data = $data["notvalid"];
                 $data["c_media"] = $temp;
+                $data["oid"] = $tempOid;
+                
             }
 
             $view = new \lw_view(dirname(__FILE__) . '/Templates/EventForm.phtml');
