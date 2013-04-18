@@ -67,7 +67,12 @@ class lw_events extends lw_plugin
             $plugindata = $this->repository->plugins()->loadPluginData($this->getPluginName(), $this->params['oid']);
             $plugindata["parameter"]["oid"] = $this->params['oid'];
         }
-        if (!empty($plugindata["parameter"])) {
+        $checkPlugindataArray = $plugindata;
+        unset($checkPlugindataArray["parameter"]["oid"]);
+        unset($checkPlugindataArray["parameter"]["content"]);
+        unset($checkPlugindataArray["parameter"]["item_id"]);
+        
+        if (!empty($checkPlugindataArray["parameter"])) {
             $response = new \LwEvents\Services\Response();
             $response->setDbObject($this->db);
             $response->setDataByKey("plugindata", $plugindata["parameter"]);
