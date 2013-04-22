@@ -28,10 +28,13 @@ class Form
             if (array_key_exists("notvalid", $data)) {
                 $temp = $data["c_media"];
                 $tempOid = $data["oid"];
+                $tempUpliadPAth = $data["upload_path"];
+                $tempUpliadUrl = $data["upload_url"];
                 $data = $data["notvalid"];
                 $data["c_media"] = $temp;
                 $data["oid"] = $tempOid;
-                
+                $data["upload_path"] = $tempUpliadPAth;
+                $data["upload_url"] = $tempUpliadUrl;
             }
 
             $view = new \lw_view(dirname(__FILE__) . '/Templates/EventForm.phtml');
@@ -83,8 +86,37 @@ class Form
                 $view->errors = false;
             }
 
+            if(array_key_exists("id", $data) && $data["id"] > 0){
+                $view->logoUrl = $this->getLogoUrl($data["id"], $data["upload_path"], $data["upload_url"]);
+            }
+            
             return $view->render();
         }
+    }
+    
+    private function getLogoUrl($id, $uploadpath, $uploadurl)
+    {
+        $filename = false;
+        $uploadDir = \lw_directory::getInstance($uploadpath);
+        $files = $uploadDir->getDirectoryContents("file");
+        
+        foreach($files as $file){
+            $name = $file->getName();
+            $explodeName = explode(".", $name);
+            $nameWithoutExtention = $explodeName[0];
+            
+            if($nameWithoutExtention == "events_logo_".$id){
+                $filename = $name;
+            }
+        }
+        
+        if(!$filename) {
+            return false;
+        }
+        else{
+            return $uploadurl.$filename;
+        }
+        
     }
 
 }

@@ -62,6 +62,15 @@
         line-height: 0;
         height: 0;
     }
+    
+    div.item{position: relative;}
+    
+    div.item img.events_logo{
+        position: absolute;
+        top: 30px;
+        right: -15px;
+        max-height: 80px;
+    }
 </style>
 <div class="back"  >
     <a class="menu" href="<?php echo $this->baseUrl ?>"><?php
@@ -106,7 +115,7 @@
 
 <?php if (!empty($this->data)) : ?>
     <?php foreach ($this->data as $entry) : ?>
-        <div class="news_item">
+        <div class="item">
             <?php if ($this->admin) : ?>
                 <div class="button_menu">
                     <a class="menu" href="<?php echo $this->baseUrl . "/#" ?>" onclick="if (confirm('Diesen Eintrag wirklich l&ouml;schen ?')) {
@@ -115,6 +124,9 @@
                                         }" >l&ouml;schen</a>
                     <a class="menu" href="<?php echo $this->baseUrl . "&show=form&cmd=edit&id=" . $entry["id"] ?>">bearbeiten</a>
                 </div>
+            <?php endif; ?>
+            <?php if(array_key_exists("logoUrl", $entry)) :?>
+                <img class="events_logo" src="<?php echo $entry["logoUrl"]; ?>" >
             <?php endif; ?>
             <div style="margin-top:10px;color:#627D90;">
                 <?php
@@ -184,7 +196,7 @@
         </div>
     <?php endforeach; ?>
 <?php else : ?>
-    <div class="news_item">
+    <div class="item">
         <div class="button_menu">
             <p><?php
                 if ($this->lang == "en") {

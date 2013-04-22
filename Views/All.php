@@ -23,18 +23,51 @@ class All
     {
         $language = $data["lang"];
         $oid = $data["oid"];
+        $uploadpath = $data["upload_path"];
+        $uploadurl = $data["upload_url"];
         unset($data["lang"]);
+        unset($data["upload_url"]);
+        unset($data["upload_path"]);
         unset($data["oid"]);
 
+        
         $view = new \lw_view(dirname(__FILE__) . '/Templates/EventsList.phtml');
         $view->admin = $admin;
         $view->baseUrl = \LwEvents\Services\Page::getUrl()."&oid=".$oid;
         $view->baseUrlWithoutIndex = substr(\LwEvents\Services\Page::getUrl(), 0, strpos(\LwEvents\Services\Page::getUrl(), "index=") + strlen("index="));
-        $view->data = $data;
+        $view->data = $this->addLogoUrlToDataArrayIfExists($data, $uploadpath, $uploadurl);
         $view->lang = $language;
         $view->oid = $oid;
 
         return $view->render();
+    }
+    
+    private function addLogoUrlToDataArrayIfExists($data, $uploadpath, $uploadurl)
+    {
+        $uploadDir = \lw_directory::getInstance($uploadpath);
+        $files = $uploadDir->getDirectoryContents("file");
+        
+        $idArray = array();
+        
+        foreach($files as $file){
+            $name = $file->getName();
+            $explodeName = explode(".", $name);
+            $nameWithoutExtention = $explodeName[0];
+        
+            $id = str_replace("events_logo_", "", $nameWithoutExtention);
+            $idArray[$id] = ".".$explodeName[1];
+        }
+        
+        $i = 0;
+        foreach($data as $entry){
+            if(array_key_exists($entry["id"], $idArray)) {
+                #die("TRUE");
+                $data[$i]["logoUrl"] = $uploadurl."events_logo_".$entry["id"].$idArray[$entry["id"]];
+            }
+            $i++;
+        }
+        
+     return $data;   
     }
 
 }

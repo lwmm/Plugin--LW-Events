@@ -41,6 +41,7 @@ class Form
                     $array2 = $this->response->getDataByKey("plugindata");
                     $array = $this->request->getRaw("news");
                     $array["language"] = $array2["language"];
+                    $array["uploadfield"] = $this->request->getFileData("uploadfield");
                  
                     if($this->request->getAlnum("type") == "text" && !empty($array["maintext"])) {
                         $array["pageid"] = 0;  
@@ -57,14 +58,14 @@ class Form
                     }
 
                     if ($bool) {
-                        $commandHandler = new \LwEvents\Domain\Event\DataHandler\CommandHandler($this->response->getDbObject());
+                        $commandHandler = new \LwEvents\Domain\Event\DataHandler\CommandHandler($this->response->getDbObject(), $this->response->getDataByKey("upload_path"));
                         $commandHandler->addEntry($array);
 
                         \LwEvents\Services\Page::reload(\LwEvents\Services\Page::getUrl(array("show" => "all")));
                     }
                     else {
                         $plugindata = $this->response->getDataByKey("plugindata");
-                        return array("notvalid" => $this->returnErrorArray("add"), "c_media" => $this->response->getDataByKey("c_media"), "oid" => $plugindata["oid"]);
+                        return array("notvalid" => $this->returnErrorArray("add"), "c_media" => $this->response->getDataByKey("c_media"), "oid" => $plugindata["oid"], "upload_path" => $this->response->getDataByKey("upload_path"), "upload_url" => $this->response->getDataByKey("upload_url"));
                     }
                 }
                 else {
@@ -74,9 +75,16 @@ class Form
                 break;
 
             case "edit":
+                if($this->request->getInt("logodeletion") && $this->request->getInt("logodeletion") == 1) {
+                    $commandHandler = new \LwEvents\Domain\Event\DataHandler\CommandHandler($this->response->getDbObject(), $this->response->getDataByKey("upload_path"));
+                    $commandHandler->deleteLogo($this->request->getInt("id"));
+                    \LwEvents\Services\Page::reload(\LwEvents\Services\Page::getUrl(array("oid" => $this->request->getInt("oid"), "show" => "form", "cmd" => "edit", "id" => $this->request->getInt("id"))));
+                }
+                    
                 if ($this->request->getInt("sent") == 1) {
                     $bool = $this->validate();
                     $array = $this->request->getRaw("news");
+                    $array["uploadfield"] = $this->request->getFileData("uploadfield");
                     
                     if($this->request->getAlnum("type") == "text" && !empty($array["maintext"])) {
                         $array["pageid"] = 0;  
@@ -93,14 +101,14 @@ class Form
                     }
                     
                     if ($bool) {
-                        $commandHandler = new \LwEvents\Domain\Event\DataHandler\CommandHandler($this->response->getDbObject());
+                        $commandHandler = new \LwEvents\Domain\Event\DataHandler\CommandHandler($this->response->getDbObject(), $this->response->getDataByKey("upload_path"));
                         $commandHandler->saveEntry($this->request->getInt("id"), $array);
 
                         \LwEvents\Services\Page::reload(\LwEvents\Services\Page::getUrl(array("show" => "all")));
                     }
                     else {
                         $plugindata = $this->response->getDataByKey("plugindata");
-                        return array("notvalid" => $this->returnErrorArray("edit"), "c_media" => $this->response->getDataByKey("c_media"), "oid" => $plugindata["oid"]);
+                        return array("notvalid" => $this->returnErrorArray("edit"), "c_media" => $this->response->getDataByKey("c_media"), "oid" => $plugindata["oid"], "upload_path" => $this->response->getDataByKey("upload_path"), "upload_url" => $this->response->getDataByKey("upload_url"));
                     }
                 }
                 else {
@@ -120,7 +128,9 @@ class Form
                         ),
                         "cmd" => "edit", "id" => $result["id"],
                         "c_media" => $this->response->getDataByKey("c_media"),
-                        "oid" => $plugindata["oid"]
+                        "oid" => $plugindata["oid"],
+                        "upload_path" => $this->response->getDataByKey("upload_path"),
+                        "upload_url" => $this->response->getDataByKey("upload_url")
                     );
                     return $array;
                 }
@@ -135,7 +145,10 @@ class Form
      */
     private function validate()
     {
-        $this->isValid->setValues($this->request->getRaw("news"));
+        $array = $this->request->getRaw("news");
+        $array["uploadfield"] = $this->request->getFileData("uploadfield");
+        
+        $this->isValid->setValues($array);
         return $this->isValid->validate();
     }
 

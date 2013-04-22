@@ -1,5 +1,12 @@
 <script language="javascript" type="text/javascript" src="<?php echo $this->mce ?>"></script>
 <style>
+    a.button{
+        padding: 0 10px;
+        background-color: #F57912;
+        color: #FFF;
+        margin-left: 5px;
+    }
+    
     #formButtons{
         margin-top: 20px;
     }
@@ -124,7 +131,7 @@
         <a href="<?php echo $this->baseUrl . "&show=all" ?>"> zur&uuml;ck</a>
     </div>
 
-    <form action="<?php echo $this->formAction ?>" method="POST">
+    <form action="<?php echo $this->formAction ?>" method="POST" ENCTYPE="multipart/form-data">
 
         <?php if ($this->errors && array_key_exists("date", $this->errors)) : ?>
             <?php if (array_key_exists(1, $this->errors["date"])): ?>
@@ -199,6 +206,27 @@
             }
             ?>">
         </div>
+        
+        <?php if ($this->errors && array_key_exists("uploadfield", $this->errors)) : ?>
+            <?php if (array_key_exists(13, $this->errors["uploadfield"])): ?>
+                <div class="error">
+                    <p>Erlaubte Bildtypen sind: .jpg, .jpeg, .png, .gif .</p>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+        <div class="formElement">
+            <div id="uploadedFile">
+                <h3>Hochgeladene Datei:  <?php if(!$this->logoUrl) :?><span style="font-weight:normal;font-size: 13px;">keine</span><?php endif; ?></h3>
+                <?php if($this->logoUrl) :?>
+                    <div>
+                        <a class="button" href="<?php echo $this->formAction . "&logodeletion=1" ?>" onclick="return confirm('Logo wirklich l&ouml;schen ?');" >Logo l&ouml;schen</a>
+                    </div>
+                    <img src="<?php echo $this->logoUrl; ?>">
+                <?php endif; ?>
+            </div>
+            <input class="upload" name="uploadfield" type="file">
+        </div>
+        
         <?php if ($this->errors && array_key_exists("maintextANDpageid", $this->errors)) : ?>
             <?php if (array_key_exists(10, $this->errors["maintextANDpageid"])): ?>
                 <div class="error">
@@ -267,7 +295,7 @@
         $('#containerCms').show();
                     ">Verweis auf eine CMS-Seite</label><br>
 
-            <input type="radio" id="typeext"  value="ext" name="type" <?php if ($this->formData && $this->formData["pageid"] == 0 && $this->formData["maintext"] == "") : ?> checked="checked" <?php endif; ?>   onclick="
+            <input type="radio" id="typeext"  value="ext" name="type" <?php if ($this->formData && $this->formData["pageid"] == 0 && $this->formData["maintext"] == "" && $this->formData["exturl"] != "") : ?> checked="checked" <?php endif; ?>   onclick="
         $('#containerMainText').hide();
         $('#containerCms').hide();
         $('#containerTeasertext').show();

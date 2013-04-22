@@ -21,6 +21,7 @@ define("BOOL", "9");        # array( 9 => array( "error" => 1, "options" => "" )
 define("MAINTEXTANDPAGEID", "10");# array( 10 => array( "error" => 1, "options" => "" ));
 define("TODATELOWERFROMDATE", "11");# array( 11 => array( "error" => 1, "options" => "" ));
 define("URL", "12");        # array( 12 => array( "error" => 1, "options" => "" ));
+define("NOTALLOWEDFILEEXTENSION", "13");        # array( 12 => array( "error" => 1, "options" => "" ));
 
 class isValid
 {
@@ -35,7 +36,8 @@ class isValid
             "date",
             "date2",
             "exturl",
-            "teasertext");
+            "teasertext",
+            "uploadfield");
 
         $this->errors = array();
     }
@@ -162,6 +164,21 @@ class isValid
             return false;
         }
         return true;
+    }
+    
+    private function uploadfieldValidate($fileDataArray)
+    {
+        if(empty($fileDataArray["name"])) {
+            return true;
+        }
+        $uploadExtension = ".".\lw_io::getFileExtension($fileDataArray["name"]);
+        
+        if($uploadExtension == ".jpeg" || $uploadExtension == ".jpg" || $uploadExtension == ".png" || $uploadExtension == ".gif") {
+            return true;
+        }
+        
+        $this->addError("uploadfield", 13);
+        return false;
     }
 
     private function dateValidate($value)

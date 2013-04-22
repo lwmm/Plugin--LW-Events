@@ -1,0 +1,6 @@
+Eintrag für die Config:
+Ordner in lw_resource erstellen und diesen als Parameter angeben.
+Beispiel "events".
+
+[events]
+upload_foler_in_resource = events/

@@ -39,6 +39,8 @@ class All
         $array = $queryHandler->selectAllActualEvents($plugindata["language"]);
         $array["lang"] = $plugindata["language"];
         $array["oid"] = $plugindata["oid"];
+        $array["upload_path"] = $this->response->getDataByKey("upload_path");
+        $array["upload_url"] = $this->response->getDataByKey("upload_url");
 
         return $array;
     }

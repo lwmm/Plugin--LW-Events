@@ -37,7 +37,7 @@ class Detail
         $queryHandler = new \LwEvents\Domain\Event\DataHandler\QueryHandler($this->response->getDbObject());
         $result = $queryHandler->selectEntry($this->request->getInt("id"));
 
-        return array("formData" => $result, "lang" => $plugindata["language"], "oid" => $plugindata["oid"]);
+        return array("formData" => $result, "lang" => $plugindata["language"], "oid" => $plugindata["oid"], "upload_path" => $this->response->getDataByKey("upload_path"), "upload_url" => $this->response->getDataByKey("upload_url"));
     }
 
 }

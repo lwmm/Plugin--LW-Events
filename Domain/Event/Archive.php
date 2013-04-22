@@ -39,6 +39,8 @@ class Archive
         $array["uniqueYears"] = $queryHandler->selectAllUniqueYears();
         $array["lang"] = $plugindata["language"];
         $array["oid"] = $plugindata["oid"];
+        $array["upload_path"] = $this->response->getDataByKey("upload_path");
+        $array["upload_url"] = $this->response->getDataByKey("upload_url");
 
         if ($this->request->getInt("year")) {
             $array["entries"] = $queryHandler->selectAllArchivedEvents($plugindata["language"], $this->request->getInt("year"));

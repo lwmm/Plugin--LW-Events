@@ -12,15 +12,17 @@ class CommandHandler
 {
 
     private $db;
+    private $uploadpath;
 
     /**
      * An instance of lw_db is needed.
      * 
      * @param object $db
      */
-    public function __construct($db)
+    public function __construct($db, $uploadpath)
     {
         $this->db = $db;
+        $this->uploadpath = $uploadpath;
     }
 
     /**
@@ -31,7 +33,7 @@ class CommandHandler
      */
     public function addEntry($array)
     {
-        if(empty($array["date2"])) {
+        if (empty($array["date2"])) {
             $array["date2"] = $array["date"];
         }
         $this->db->setStatement("INSERT INTO t:lw_master ( lw_object, language, opt1text, opt2text, opt3text, opt4text, opt1number, opt2number, opt3number, opt4number, lw_first_date, lw_last_date) VALUES ( :lw_object, :language, :opt1text, :opt2text, :opt3text, :opt4text, :opt1number, :opt2number, :opt3number, :opt4number, :date, :date ) ");
@@ -49,6 +51,7 @@ class CommandHandler
         $id = $this->db->pdbinsert($this->db->gt("lw_master"));
 
         if ($id > 0) {
+            $this->saveLogo($id, $array["uploadfield"]);
             return $this->db->saveClob($this->db->gt("lw_master"), "opt1clob", $this->db->quote($array["maintext"]), $id);
         }
         else {
@@ -65,7 +68,7 @@ class CommandHandler
      */
     public function saveEntry($id, $array)
     {
-        if(empty($array["date2"])) {
+        if (empty($array["date2"])) {
             $array["date2"] = $array["date"];
         }
         $this->db->setStatement("UPDATE t:lw_master SET opt1text = :opt1text, opt2text = :opt2text, opt3text = :opt3text, opt4text = :opt4text, opt1number = :opt1number, opt2number = :opt2number, opt3number = :opt3number, opt4number = :opt4number, lw_last_date = :date  WHERE id = :id ");
@@ -82,6 +85,9 @@ class CommandHandler
         $this->db->pdbquery();
 
         if ($id > 0) {
+            if(!empty($array["uploadfield"]["name"])) {
+                $this->saveLogo($id, $array["uploadfield"]);
+            }
             return $this->db->saveClob($this->db->gt("lw_master"), "opt1clob", $this->db->quote($array["maintext"]), $id);
         }
         else {
@@ -100,6 +106,59 @@ class CommandHandler
         $this->db->setStatement("DELETE FROM t:lw_master WHERE id = :id ");
         $this->db->bindParameter("id", "i", $id);
         return $this->db->pdbquery();
+    }
+
+    private function saveLogo($id, $fileDataArray)
+    {        
+        $extension = "." . \lw_io::getFileExtension($fileDataArray["name"]);
+        $filename = "events_logo_" . $id . $extension;
+
+        $uploadDir = \lw_directory::getInstance($this->uploadpath);
+        $files = $uploadDir->getDirectoryContents("file");
+
+        foreach ($files as $file) {
+            $name = $file->getName();
+            $explodeName = explode(".", $name);
+            $nameWithoutExtention = $explodeName[0];
+
+            if ($nameWithoutExtention == "events_logo_" . $id) {
+                $uploadDir->deleteFile($file->getName());
+            }
+        }
+
+        $uploadDir->addFile($fileDataArray['tmp_name'], $filename);
+        
+        $image = new \LwEvents\Services\LogoResizer($this->uploadpath.$filename);
+        $image->setParams(200, 100);
+        $image->resize();
+        $image->crop();
+        $image->saveImage();
+        
+        #$image = new \LwEvents\Services\LogoResizer($fileDataArray["tmp_name"]);
+        
+        #$image = new \lw_image($fileDataArray['tmp_name']);
+        #$image->scaleImage(200,150,$this->uploadpath.$filename, true, false);
+        #$image->cropImage($this->uploadpath.$filename, $this->uploadpath.$filename, "center", 200, 150);
+        #print_r($image->getImageType());die();
+        
+    }
+    
+    public function deleteLogo($id)
+    {
+        $uploadDir = \lw_directory::getInstance($this->uploadpath);
+        $files = $uploadDir->getDirectoryContents("file");
+
+        foreach ($files as $file) {
+            $name = $file->getName();
+            $explodeName = explode(".", $name);
+            $nameWithoutExtention = $explodeName[0];
+
+            if ($nameWithoutExtention == "events_logo_" . $id) {
+                $uploadDir->deleteFile($file->getName());
+            }
+        }
+        
+        return true;
     }
 
 }

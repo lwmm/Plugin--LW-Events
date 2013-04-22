@@ -33,7 +33,7 @@ class Archive
         $view->selectedYear = $data["selectedYear"];
 
         if (array_key_exists("entries", $data)) {
-            $view->data = $data["entries"];
+            $view->data = $this->addLogoUrlToDataArrayIfExists($data["entries"], $data["upload_path"], $data["upload_url"]);
         }
         else {
             $view->data = "";
@@ -42,6 +42,34 @@ class Archive
         $view->lang = $language;
 
         return $view->render();
+    }
+    
+     private function addLogoUrlToDataArrayIfExists($data, $uploadpath, $uploadurl)
+    {
+        $uploadDir = \lw_directory::getInstance($uploadpath);
+        $files = $uploadDir->getDirectoryContents("file");
+        
+        $idArray = array();
+        
+        foreach($files as $file){
+            $name = $file->getName();
+            $explodeName = explode(".", $name);
+            $nameWithoutExtention = $explodeName[0];
+        
+            $id = str_replace("events_logo_", "", $nameWithoutExtention);
+            $idArray[$id] = ".".$explodeName[1];
+        }
+        
+        $i = 0;
+        foreach($data as $entry){
+            if(array_key_exists($entry["id"], $idArray)) {
+                #die("TRUE");
+                $data[$i]["logoUrl"] = $uploadurl."events_logo_".$entry["id"].$idArray[$entry["id"]];
+            }
+            $i++;
+        }
+        
+     return $data;   
     }
 
 }

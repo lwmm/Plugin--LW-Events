@@ -11,6 +11,14 @@
         color: #FFF;
         margin-left: 5px;
     }
+    div.item{position: relative;}
+    
+    div.item img.events_logo{
+        position: absolute;
+        top: -5px;
+        right: -15px;
+        max-height: 80px;
+    }
 </style>
 <div  class="back">
     <a class="menu" href="<?php echo $this->baseUrl ?>"><?php
@@ -22,7 +30,10 @@
         ?></a>
 </div>
 
-<div class="news_item">
+<div class="item">
+    <?php if($this->logoUrl) :?>
+        <img class="events_logo" src="<?php echo $this->logoUrl; ?>" >
+    <?php endif; ?>
     <div style="margin-top:10px;color:#627D90;">
         <?php
         $year = substr($this->data['opt2number'], 0, 4);

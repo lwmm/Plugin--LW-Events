@@ -77,7 +77,24 @@ class lw_events extends lw_plugin
             $response->setDbObject($this->db);
             $response->setDataByKey("plugindata", $plugindata["parameter"]);
             $response->setDataByKey("c_media", $this->config["url"]["media"]);
-
+            
+            $uploadPath = $this->config["path"]["resource"].$this->config["events"]["upload_foler_in_resource"];
+            $uploadUrl = $this->config["url"]["resource"].$this->config["events"]["upload_foler_in_resource"];
+            
+            if(!is_dir($uploadPath)){ 
+                throw new \Exception("Der in der Config eingetragene Upload-Path ist kein Verzeichnis.");
+            }
+            elseif (empty($uploadPath)) {
+                throw new \Exception("Kein Upload-Path in der Config angegeben.");
+            }
+            elseif (!is_writable($uploadPath)) {
+                throw new \Exception("Der in der Config eingetragene Upload-Path ist nicht beschreibbar.");
+            }
+            else{
+                $response->setDataByKey("upload_path", $uploadPath);
+                $response->setDataByKey("upload_url", $uploadUrl);
+            }
+            
             $controller = new \LwEvents\Controller\EventsController($response, $this->request, $this->auth->isLoggedIn());
             $controller->execute();
 
