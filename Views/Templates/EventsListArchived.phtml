@@ -62,7 +62,7 @@
         line-height: 0;
         height: 0;
     }
-    
+
     div.item img.events_logo{
         float: left;
         max-width: 170px;
@@ -124,74 +124,100 @@
                     <a class="menu" href="<?php echo $this->baseUrl . "&show=form&cmd=edit&id=" . $entry["id"] ?>">bearbeiten</a>
                 </div>
             <?php endif; ?>
-            <?php if(array_key_exists("logoUrl", $entry)) :?>
-                <img class="events_logo" src="<?php echo $entry["logoUrl"]; ?>" >
-            <?php endif; ?>
-            <div style="margin-top:10px;color:#627D90;">
-                <?php
-                $year = substr($entry['opt2number'], 0, 4);
-                $month = substr($entry['opt2number'], 4, 2);
-                $day = substr($entry['opt2number'], 6, 2);
+            <?php if (array_key_exists("logoUrl", $entry)) : ?>
+                <div class="clearfix">
+                    <img class="events_logo" src="<?php echo $entry["logoUrl"]; ?>" >
+                    <div style="float:right;width: 300px;">
+                        <div style="margin-top:10px;color:#627D90;">
+                            <?php
+                            $year = substr($entry['opt2number'], 0, 4);
+                            $month = substr($entry['opt2number'], 4, 2);
+                            $day = substr($entry['opt2number'], 6, 2);
 
-                $date2 = "";
-                if ($entry["opt4number"] != $entry["opt2number"]) {
-                    $year2 = substr($entry['opt4number'], 0, 4);
-                    $month2 = substr($entry['opt4number'], 4, 2);
-                    $day2 = substr($entry['opt4number'], 6, 2);
+                            $date2 = "";
+                            if ($entry["opt4number"] != $entry["opt2number"]) {
+                                $year2 = substr($entry['opt4number'], 0, 4);
+                                $month2 = substr($entry['opt4number'], 4, 2);
+                                $day2 = substr($entry['opt4number'], 6, 2);
 
-                    $date2 = ' - ' . $day2 . '.' . $month2 . '.' . $year2;
-                }
-                echo $day . '.' . $month . '.' . $year . $date2;
-                ?>
-            </div>
+                                $date2 = ' - ' . $day2 . '.' . $month2 . '.' . $year2;
+                            }
+                            echo $day . '.' . $month . '.' . $year . $date2;
+                            ?>
+                        </div>
 
-            <h1><?php echo $entry["opt1text"] ?></h1>
+                        <h1><?php echo $entry["opt1text"] ?></h1>
 
-            <h2><?php echo $entry["opt2text"] ?></h2>
-
-            <div style="border-bottom:1px dotted #627D90;padding-bottom:10px;">
-                <p>
+                        <h2><?php echo $entry["opt2text"] ?></h2>
+                    </div>
+                </div>
+            <?php else: ?>
+                <div style="margin-top:10px;color:#627D90;">
                     <?php
-                    if (!empty($entry["opt3text"])) {
-                        if ($this->lang == "en") {
-                            $more = "more";
-                        }
-                        else {
-                            $more = "mehr";
-                        }
-                        echo $entry["opt4text"];
-                        echo "...[<a class=\"extern\" href=\"" . $entry["opt3text"] . "\">" . $more . "</a>]";
-                    }
-                    
-                    if (!empty($entry["opt1number"])) {
-                        if ($this->lang == "en") {
-                            $more = "more";
-                        }
-                        else {
-                            $more = "mehr";
-                        }
-                        echo $entry["opt4text"];
-                        echo "...[<a class=\"intern\" href=\"" . $this->baseUrlWithoutIndex . $entry["opt1number"] . "\">" . $more . "</a>]";
-                    }
+                    $year = substr($entry['opt2number'], 0, 4);
+                    $month = substr($entry['opt2number'], 4, 2);
+                    $day = substr($entry['opt2number'], 6, 2);
 
-                    if (!empty($entry["opt1clob"])) {
-                        $str = "";
-                        if ($this->lang == "en") {
-                            $more = "more";
-                        }
-                        else {
-                            $more = "mehr";
-                        }
-                        if (strlen($entry["opt1clob"]) > 250) {
-                            $str = substr($entry["opt1clob"], 0, 250);
-                        }
-                        else {
-                            echo $entry["opt1clob"];
-                        }
-                        echo $str . "...[<a href=\"" . $this->baseUrl . "&show=detail&id=" . $entry["id"] . "\">" . $more . "</a>]";
+                    $date2 = "";
+                    if ($entry["opt4number"] != $entry["opt2number"]) {
+                        $year2 = substr($entry['opt4number'], 0, 4);
+                        $month2 = substr($entry['opt4number'], 4, 2);
+                        $day2 = substr($entry['opt4number'], 6, 2);
+
+                        $date2 = ' - ' . $day2 . '.' . $month2 . '.' . $year2;
                     }
-                    ?></p>
-            </div>
+                    echo $day . '.' . $month . '.' . $year . $date2;
+                    ?>
+                </div>
+
+                <h1><?php echo $entry["opt1text"] ?></h1>
+
+                <h2><?php echo $entry["opt2text"] ?></h2>
+        <?php endif; ?>
+
+        <div style="border-bottom:1px dotted #627D90;padding-bottom:10px;">
+            <p>
+                <?php
+                if (!empty($entry["opt3text"])) {
+                    if ($this->lang == "en") {
+                        $more = "more";
+                    }
+                    else {
+                        $more = "mehr";
+                    }
+                    echo $entry["opt4text"];
+                    echo "...[<a class=\"extern\" href=\"" . $entry["opt3text"] . "\">" . $more . "</a>]";
+                }
+
+                if (!empty($entry["opt1number"])) {
+                    if ($this->lang == "en") {
+                        $more = "more";
+                    }
+                    else {
+                        $more = "mehr";
+                    }
+                    echo $entry["opt4text"];
+                    echo "...[<a class=\"intern\" href=\"" . $this->baseUrlWithoutIndex . $entry["opt1number"] . "\">" . $more . "</a>]";
+                }
+
+                if (!empty($entry["opt1clob"])) {
+                    $str = "";
+                    if ($this->lang == "en") {
+                        $more = "more";
+                    }
+                    else {
+                        $more = "mehr";
+                    }
+                    if (strlen($entry["opt1clob"]) > 250) {
+                        $str = substr($entry["opt1clob"], 0, 250);
+                    }
+                    else {
+                        echo $entry["opt1clob"];
+                    }
+                    echo $str . "...[<a href=\"" . $this->baseUrl . "&show=detail&id=" . $entry["id"] . "\">" . $more . "</a>]";
+                }
+                ?></p>
+        </div>
         </div>
     <?php endforeach; ?>
 <?php else : ?>
