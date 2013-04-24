@@ -125,9 +125,15 @@
                 </div>
             <?php endif; ?>
             <?php if (array_key_exists("logoUrl", $entry)) : ?>
+                <?php
+                list($width) = @getimagesize($entry["logoUrl"]);
+                if ($width < 170) {
+                    $div_width = 300 + (170 - $width);
+                }
+                ?>
                 <div class="clearfix">
                     <img class="events_logo" src="<?php echo $entry["logoUrl"]; ?>" >
-                    <div style="float:right;width: 300px;">
+                    <div style="float:left;width: <?php echo $div_width; ?>px;">
                         <div style="margin-top:10px;color:#627D90;">
                             <?php
                             $year = substr($entry['opt2number'], 0, 4);
@@ -173,51 +179,51 @@
                 <h1><?php echo $entry["opt1text"] ?></h1>
 
                 <h2><?php echo $entry["opt2text"] ?></h2>
-        <?php endif; ?>
+            <?php endif; ?>
 
-        <div style="border-bottom:1px dotted #627D90;padding-bottom:10px;">
-            <p>
-                <?php
-                if (!empty($entry["opt3text"])) {
-                    if ($this->lang == "en") {
-                        $more = "more";
+            <div style="border-bottom:1px dotted #627D90;padding-bottom:10px;">
+                <p>
+                    <?php
+                    if (!empty($entry["opt3text"])) {
+                        if ($this->lang == "en") {
+                            $more = "more";
+                        }
+                        else {
+                            $more = "mehr";
+                        }
+                        echo $entry["opt4text"];
+                        echo "...[<a class=\"extern\" href=\"" . $entry["opt3text"] . "\">" . $more . "</a>]";
                     }
-                    else {
-                        $more = "mehr";
-                    }
-                    echo $entry["opt4text"];
-                    echo "...[<a class=\"extern\" href=\"" . $entry["opt3text"] . "\">" . $more . "</a>]";
-                }
 
-                if (!empty($entry["opt1number"])) {
-                    if ($this->lang == "en") {
-                        $more = "more";
+                    if (!empty($entry["opt1number"])) {
+                        if ($this->lang == "en") {
+                            $more = "more";
+                        }
+                        else {
+                            $more = "mehr";
+                        }
+                        echo $entry["opt4text"];
+                        echo "...[<a class=\"intern\" href=\"" . $this->baseUrlWithoutIndex . $entry["opt1number"] . "\">" . $more . "</a>]";
                     }
-                    else {
-                        $more = "mehr";
-                    }
-                    echo $entry["opt4text"];
-                    echo "...[<a class=\"intern\" href=\"" . $this->baseUrlWithoutIndex . $entry["opt1number"] . "\">" . $more . "</a>]";
-                }
 
-                if (!empty($entry["opt1clob"])) {
-                    $str = "";
-                    if ($this->lang == "en") {
-                        $more = "more";
+                    if (!empty($entry["opt1clob"])) {
+                        $str = "";
+                        if ($this->lang == "en") {
+                            $more = "more";
+                        }
+                        else {
+                            $more = "mehr";
+                        }
+                        if (strlen($entry["opt1clob"]) > 250) {
+                            $str = substr($entry["opt1clob"], 0, 250);
+                        }
+                        else {
+                            echo $entry["opt1clob"];
+                        }
+                        echo $str . "...[<a href=\"" . $this->baseUrl . "&show=detail&id=" . $entry["id"] . "\">" . $more . "</a>]";
                     }
-                    else {
-                        $more = "mehr";
-                    }
-                    if (strlen($entry["opt1clob"]) > 250) {
-                        $str = substr($entry["opt1clob"], 0, 250);
-                    }
-                    else {
-                        echo $entry["opt1clob"];
-                    }
-                    echo $str . "...[<a href=\"" . $this->baseUrl . "&show=detail&id=" . $entry["id"] . "\">" . $more . "</a>]";
-                }
-                ?></p>
-        </div>
+                    ?></p>
+            </div>
         </div>
     <?php endforeach; ?>
 <?php else : ?>

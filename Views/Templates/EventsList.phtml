@@ -1,5 +1,5 @@
 <style>
-     .clearfix:after {
+    .clearfix:after {
         content: ".";
         display: block;
         clear: both;
@@ -7,7 +7,7 @@
         line-height: 0;
         height: 0;
     }
-    
+
     .add {
         border-bottom:1px dotted #627D90;
         padding-bottom:10px;
@@ -79,9 +79,15 @@
                 </div>
             <?php endif; ?>
             <?php if (array_key_exists("logoUrl", $entry)) : ?>
+                <?php
+                list($width) = @getimagesize($entry["logoUrl"]);
+                if ($width < 170) {
+                    $div_width = 300 + (170 - $width);
+                }
+                ?>
                 <div class="clearfix">
                     <img class="events_logo" src="<?php echo $entry["logoUrl"]; ?>" >
-                    <div style="float:right;width: 300px;">
+                    <div style="float:left;width: <?php echo $div_width; ?>px;">
                         <div style="margin-top:10px;color:#627D90;">
                             <?php
                             $year = substr($entry['opt2number'], 0, 4);
@@ -127,7 +133,7 @@
                 <h1><?php echo $entry["opt1text"] ?></h1>
 
                 <h2><?php echo $entry["opt2text"] ?></h2>
-        <?php endif; ?>
+            <?php endif; ?>
 
             <div style="border-bottom:1px dotted #627D90;padding-bottom:10px;">
                 <p>
@@ -142,7 +148,7 @@
                         echo $entry["opt4text"];
                         echo "...[<a class=\"extern\" href=\"" . $entry["opt3text"] . "\">" . $more . "</a>]";
                     }
-                    
+
                     if (!empty($entry["opt1number"])) {
                         if ($this->lang == "en") {
                             $more = "more";
