@@ -61,8 +61,8 @@ class All
         $i = 0;
         foreach($data as $entry){
             if(array_key_exists($entry["id"], $idArray)) {
-                #die("TRUE");
                 $data[$i]["logoUrl"] = $uploadurl."events_logo_".$entry["id"].$idArray[$entry["id"]];
+                $data[$i]["logoPath"] = $uploadpath."events_logo_".$entry["id"].$idArray[$entry["id"]];
             }
             $i++;
         }

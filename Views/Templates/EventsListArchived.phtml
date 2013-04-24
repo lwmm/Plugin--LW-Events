@@ -126,9 +126,12 @@
             <?php endif; ?>
             <?php if (array_key_exists("logoUrl", $entry)) : ?>
                 <?php
-                list($width) = @getimagesize($entry["logoUrl"]);
+                list($width) = getimagesize($entry["logoPath"]);
                 if ($width < 170) {
                     $div_width = 300 + (170 - $width);
+                }
+                else{
+                    $div_width = 300;
                 }
                 ?>
                 <div class="clearfix">
