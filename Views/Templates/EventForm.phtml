@@ -70,6 +70,12 @@
         background-color: #F57912;
         color: #FFF;
     }
+    
+    img.events_logo{
+        max-width: 170px;
+        height: auto;
+        max-height: 110px;
+    }
 </style>
 <script>
     $(document).ready(function() {
@@ -221,7 +227,7 @@
                     <div>
                         <a class="button" href="<?php echo $this->formAction . "&logodeletion=1" ?>" onclick="return confirm('Logo wirklich l&ouml;schen ?');" >Logo l&ouml;schen</a>
                     </div>
-                    <img src="<?php echo $this->logoUrl; ?>">
+                    <img class="events_logo" src="<?php echo $this->logoUrl; ?>">
                 <?php endif; ?>
             </div>
             <input class="upload" name="uploadfield" type="file">

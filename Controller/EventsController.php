@@ -76,8 +76,9 @@ class EventsController extends \lw_object
      */
     private function deleteEntryById($id)
     {
-        $commandHandler = new \LwEvents\Domain\Event\DataHandler\CommandHandler($this->response->getDbObject());
+        $commandHandler = new \LwEvents\Domain\Event\DataHandler\CommandHandler($this->response->getDbObject(), $this->response->getDataByKey("upload_path"));
         $commandHandler->deleteEntry($id);
+        $commandHandler->deleteLogo($id);
 
         \LwEvents\Services\Page::reload(\LwEvents\Services\Page::getUrl());
     }

@@ -43,13 +43,12 @@
         width:10px;
         float:left;
     }
-    
-    div.item{position: relative;}
-    
     div.item img.events_logo{
-        position: absolute;
-        top: 30px;
-        right: -15px;
+        float: left;
+        max-width: 170px;
+        height: auto;
+        padding-top: 10px;
+        max-height: 110px;
     }
 </style>
 <?php if ($this->admin) : ?>
@@ -70,9 +69,11 @@
                     <a class="menu" href="<?php echo $this->baseUrl . "&show=form&cmd=edit&id=" . $entry["id"] ?>">bearbeiten</a>
                 </div>
             <?php endif; ?>
+            
             <?php if(array_key_exists("logoUrl", $entry)) :?>
                 <img class="events_logo" src="<?php echo $entry["logoUrl"]; ?>" >
             <?php endif; ?>
+            
             <div style="margin-top:10px;color:#627D90;">
                 <?php
                 $year = substr($entry['opt2number'], 0, 4);
@@ -90,7 +91,7 @@
                 echo $day . '.' . $month . '.' . $year . $date2;
                 ?>
             </div>
-
+                
             <h1><?php echo $entry["opt1text"] ?></h1>
 
             <h2><?php echo $entry["opt2text"] ?></h2>

@@ -128,19 +128,14 @@ class CommandHandler
 
         $uploadDir->addFile($fileDataArray['tmp_name'], $filename);
         
-        $image = new \LwEvents\Services\LogoResizer($this->uploadpath.$filename);
-        $image->setParams(200, 100);
-        $image->resize();
-        $image->crop();
-        $image->saveImage();
-        
-        #$image = new \LwEvents\Services\LogoResizer($fileDataArray["tmp_name"]);
-        
-        #$image = new \lw_image($fileDataArray['tmp_name']);
-        #$image->scaleImage(200,150,$this->uploadpath.$filename, true, false);
-        #$image->cropImage($this->uploadpath.$filename, $this->uploadpath.$filename, "center", 200, 150);
-        #print_r($image->getImageType());die();
-        
+        list($width) = @getimagesize($this->uploadpath.$filename);
+        if($width > 170){
+            $image = new \LwEvents\Services\LogoResizer($this->uploadpath.$filename);
+            $image->setParams(170, 100);
+            $image->resize();
+            #$image->crop();
+            $image->saveImage();        
+        }
     }
     
     public function deleteLogo($id)

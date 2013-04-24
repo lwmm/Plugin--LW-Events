@@ -67,7 +67,8 @@ class LogoResizer
     function saveImage()
     {
         $image = $this->image;
-        $destination = $this->imagepath;;
+        $destination = $this->imagepath;
+        ;
 
         switch ($this->type) {
             case "jpg":
@@ -88,7 +89,6 @@ class LogoResizer
         }
     }
 
-
     function setParams($width, $height)
     {
         $this->params['center'] = true;
@@ -100,47 +100,49 @@ class LogoResizer
 
     public function resize()
     {
-        $ow = $this->width;
-        $oh = $this->height;
-        $tw = $this->params['width'];
-        $th = $this->params['height'];
+        if ($this->width > $this->params['width']) {
+            $ow = $this->width;
+            $oh = $this->height;
+            $tw = $this->params['width'];
+            $th = $this->params['height'];
 
-        if ($this->params['resize']) {
-            $w_ratio = $tw / $ow;
-            $tc_width = $ow * $w_ratio;
-            $tc_height = floor($oh * $w_ratio);
-            if (($this->params['resize'] == "max" && $tc_height < $th) || ($this->params['resize'] == "min" && $tc_height > $th)) {
+            if ($this->params['resize']) {
+                $w_ratio = $tw / $ow;
+                $tc_width = $ow * $w_ratio;
+                $tc_height = floor($oh * $w_ratio);
+                if (($this->params['resize'] == "max" && $tc_height < $th) || ($this->params['resize'] == "min" && $tc_height > $th)) {
+                    $h_ratio = $th / $oh;
+                    $tc_width = floor($ow * $h_ratio);
+                    $tc_height = $oh * $h_ratio;
+                }
+            }
+            elseif ($tw > 0 && !$th) {
+                $w_ratio = $tw / $ow;
+                $tc_width = $ow * $w_ratio;
+                $tc_height = floor($oh * $w_ratio);
+            }
+            elseif ($th > 0 && !$tw) {
                 $h_ratio = $th / $oh;
                 $tc_width = floor($ow * $h_ratio);
                 $tc_height = $oh * $h_ratio;
             }
-        }
-        elseif ($tw > 0 && !$th) {
-            $w_ratio = $tw / $ow;
-            $tc_width = $ow * $w_ratio;
-            $tc_height = floor($oh * $w_ratio);
-        }
-        elseif ($th > 0 && !$tw) {
-            $h_ratio = $th / $oh;
-            $tc_width = floor($ow * $h_ratio);
-            $tc_height = $oh * $h_ratio;
-        }
-        else {
-            $tc_width = $ow;
-            $tc_height = $oh;
-        }
-        // Resample
-        if ($this->type == "jpg")
-            $image_p = imagecreatetruecolor($tc_width, $tc_height);
-        if (!$image_p)
-            $image_p = imagecreate($tc_width, $tc_height);
+            else {
+                $tc_width = $ow;
+                $tc_height = $oh;
+            }
+            // Resample
+            if ($this->type == "jpg")
+                $image_p = imagecreatetruecolor($tc_width, $tc_height);
+            if (!$image_p)
+                $image_p = imagecreate($tc_width, $tc_height);
 
-        $ok = imagecopyresampled($image_p, $this->image, 0, 0, 0, 0, $tc_width, $tc_height, $ow, $oh);
-        if ($ok) {
-            unset($this->image);
-            $this->image = $image_p;
-            $this->width = $tc_width;
-            $this->height = $tc_height;
+            $ok = imagecopyresampled($image_p, $this->image, 0, 0, 0, 0, $tc_width, $tc_height, $ow, $oh);
+            if ($ok) {
+                unset($this->image);
+                $this->image = $image_p;
+                $this->width = $tc_width;
+                $this->height = $tc_height;
+            }
         }
         //exit();
     }
@@ -180,4 +182,5 @@ class LogoResizer
             $this->height = $th;
         }
     }
+
 }

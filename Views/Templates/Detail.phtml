@@ -1,4 +1,13 @@
 <style>
+    .clearfix:after {
+        content: ".";
+        display: block;
+        clear: both;
+        visibility: hidden;
+        line-height: 0;
+        height: 0;
+    }
+
     .back {
         border-bottom:1px dotted #627D90;
         padding-bottom:10px;
@@ -12,12 +21,11 @@
         margin-left: 5px;
     }
     div.item{position: relative;}
-    
+
     div.item img.events_logo{
-        position: absolute;
-        top: -5px;
-        right: -15px;
-        max-height: 80px;
+        float: left;
+        max-width: 170px;
+        height: auto;
     }
 </style>
 <div  class="back">
@@ -31,31 +39,32 @@
 </div>
 
 <div class="item">
-    <?php if($this->logoUrl) :?>
-        <img class="events_logo" src="<?php echo $this->logoUrl; ?>" >
-    <?php endif; ?>
-    <div style="margin-top:10px;color:#627D90;">
-        <?php
-        $year = substr($this->data['opt2number'], 0, 4);
-        $month = substr($this->data['opt2number'], 4, 2);
-        $day = substr($this->data['opt2number'], 6, 2);
+    <div class="clearfix">
+        <?php if ($this->logoUrl) : ?>
+            <img class="events_logo" src="<?php echo $this->logoUrl; ?>" >
+        <?php endif; ?>
+        <div style="margin-top:10px;color:#627D90;">
+            <?php
+            $year = substr($this->data['opt2number'], 0, 4);
+            $month = substr($this->data['opt2number'], 4, 2);
+            $day = substr($this->data['opt2number'], 6, 2);
 
-        $date2 = "";
-        if ($this->data["opt4number"] != $this->data["opt2number"]) {
-            $year2 = substr($this->data['opt4number'], 0, 4);
-            $month2 = substr($this->data['opt4number'], 4, 2);
-            $day2 = substr($this->data['opt4number'], 6, 2);
+            $date2 = "";
+            if ($this->data["opt4number"] != $this->data["opt2number"]) {
+                $year2 = substr($this->data['opt4number'], 0, 4);
+                $month2 = substr($this->data['opt4number'], 4, 2);
+                $day2 = substr($this->data['opt4number'], 6, 2);
 
-            $date2 = ' - ' . $day2 . '.' . $month2 . '.' . $year2;
-        }
-        echo $day . '.' . $month . '.' . $year . $date2;
-        ?>
+                $date2 = ' - ' . $day2 . '.' . $month2 . '.' . $year2;
+            }
+            echo $day . '.' . $month . '.' . $year . $date2;
+            ?>
+        </div>
+
+        <h1><?php echo $this->data["opt1text"] ?></h1>
+
+        <h2><?php echo $this->data["opt2text"] ?></h2>
     </div>
-
-    <h1><?php echo $this->data["opt1text"] ?></h1>
-
-    <h2><?php echo $this->data["opt2text"] ?></h2>
-
     <div style="border-bottom:1px dotted #627D90;padding-bottom:10px;">
         <p> <?php echo nl2br($this->data["opt1clob"]); ?></p>
     </div>
