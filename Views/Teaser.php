@@ -19,7 +19,7 @@ class Teaser
      * @param bool $admin
      * @return string
      */
-    public function render($data)
+    public function render($data, $admin = false, $baseUrl = false)
     {
         $language = $data["lang"];
         $calements = $data["calelements"];
@@ -32,8 +32,8 @@ class Teaser
         unset($data["oid"]);
         unset($data["calendar"]);
 
-        $url = substr(\LwEvents\Services\Page::getUrl(), 0, strpos(\LwEvents\Services\Page::getUrl(), "index=") + strlen("index="));
-        
+        $url = substr($baseUrl, 0, strpos($baseUrl, "index=") + strlen("index="));
+
         $view = new \lw_view(dirname(__FILE__) . '/Templates/TeaserList.phtml');
         $view->baseUrl = $url.$targetid."&oid=".$oid;
         $view->baseUrlWithoutIndex = $url;

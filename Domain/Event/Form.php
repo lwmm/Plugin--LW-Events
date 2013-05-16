@@ -61,7 +61,7 @@ class Form
                         $commandHandler = new \LwEvents\Domain\Event\DataHandler\CommandHandler($this->response->getDbObject(), $this->response->getDataByKey("upload_path"));
                         $commandHandler->addEntry($array);
 
-                        \LwEvents\Services\Page::reload(\LwEvents\Services\Page::getUrl(array("show" => "all")));
+                        \LwEvents\Services\Page::reload($this->response->getDataByKey("baseUrl")."&show=all");
                     }
                     else {
                         $plugindata = $this->response->getDataByKey("plugindata");
@@ -78,7 +78,7 @@ class Form
                 if($this->request->getInt("logodeletion") && $this->request->getInt("logodeletion") == 1) {
                     $commandHandler = new \LwEvents\Domain\Event\DataHandler\CommandHandler($this->response->getDbObject(), $this->response->getDataByKey("upload_path"));
                     $commandHandler->deleteLogo($this->request->getInt("id"));
-                    \LwEvents\Services\Page::reload(\LwEvents\Services\Page::getUrl(array("oid" => $this->request->getInt("oid"), "show" => "form", "cmd" => "edit", "id" => $this->request->getInt("id"))));
+                    \LwEvents\Services\Page::reload($this->response->getDataByKey("baseUrl")."&show=all&oid=".$this->request->getInt("oid")."&show=form&cmd=edit&id=".$this->request->getInt("id"));
                 }
                     
                 if ($this->request->getInt("sent") == 1) {
@@ -104,7 +104,7 @@ class Form
                         $commandHandler = new \LwEvents\Domain\Event\DataHandler\CommandHandler($this->response->getDbObject(), $this->response->getDataByKey("upload_path"));
                         $commandHandler->saveEntry($this->request->getInt("id"), $array);
 
-                        \LwEvents\Services\Page::reload(\LwEvents\Services\Page::getUrl(array("show" => "all")));
+                        \LwEvents\Services\Page::reload($this->response->getDataByKey("baseUrl")."&show=all");
                     }
                     else {
                         $plugindata = $this->response->getDataByKey("plugindata");

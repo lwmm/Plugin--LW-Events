@@ -19,7 +19,7 @@ class All
      * @param bool $admin
      * @return string
      */
-    public function render($data, $admin = false)
+    public function render($data, $admin = false, $baseUrl = false)
     {
         $language = $data["lang"];
         $oid = $data["oid"];
@@ -33,8 +33,9 @@ class All
         
         $view = new \lw_view(dirname(__FILE__) . '/Templates/EventsList.phtml');
         $view->admin = $admin;
-        $view->baseUrl = \LwEvents\Services\Page::getUrl()."&oid=".$oid;
-        $view->baseUrlWithoutIndex = substr(\LwEvents\Services\Page::getUrl(), 0, strpos(\LwEvents\Services\Page::getUrl(), "index=") + strlen("index="));
+        #$view->baseUrl = \LwEvents\Services\Page::getUrl()."&oid=".$oid;
+        $view->baseUrl = $baseUrl."&oid=".$oid;
+        $view->baseUrlWithoutIndex = substr($baseUrl, 0, strpos($baseUrl, "index=") + strlen("index="));
         $view->data = $this->addLogoUrlToDataArrayIfExists($data, $uploadpath, $uploadurl);
         $view->lang = $language;
         $view->oid = $oid;

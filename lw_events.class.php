@@ -77,6 +77,7 @@ class lw_events extends lw_plugin
             $response->setDbObject($this->db);
             $response->setDataByKey("plugindata", $plugindata["parameter"]);
             $response->setDataByKey("c_media", $this->config["url"]["media"]);
+            $response->setDataByKey("baseUrl", $this->config["url"]["client"]."index.php?index=".$this->request->getIndex());
             
             $uploadPath = $this->config["path"]["resource"].$this->config["events"]["upload_foler_in_resource"];
             $uploadUrl = $this->config["url"]["resource"].$this->config["events"]["upload_foler_in_resource"];

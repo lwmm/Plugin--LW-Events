@@ -19,7 +19,7 @@ class Archive
      * @param bool $admin
      * @return string
      */
-    public function render($data, $admin = false)
+    public function render($data, $admin = false, $baseUrl = false)
     {
         $language = $data["lang"];
         $years = $data["uniqueYears"];
@@ -27,8 +27,8 @@ class Archive
 
         $view = new \lw_view(dirname(__FILE__) . '/Templates/EventsListArchived.phtml');
         $view->admin = $admin;
-        $view->baseUrl = \LwEvents\Services\Page::getUrl()."&oid=".$data["oid"];
-        $view->baseUrlWithoutIndex = substr(\LwEvents\Services\Page::getUrl(), 0, strpos(\LwEvents\Services\Page::getUrl(), "index=") + strlen("index="));
+        $view->baseUrl = $baseUrl."&oid=".$data["oid"];
+        $view->baseUrlWithoutIndex = substr($baseUrl, 0, strpos($baseUrl, "index=") + strlen("index="));
         $view->years = $years;
         $view->selectedYear = $data["selectedYear"];
 

@@ -60,12 +60,12 @@ class EventsController extends \lw_object
             $controller = new $class($this->response, $this->request);
 
             $view = new $class_view($this->request);
-            $this->response->setOutputByKey("lw_events_".$plugindata["oid"], $view->render($controller->execute(), $this->admin));
+            $this->response->setOutputByKey("lw_events_".$plugindata["oid"], $view->render($controller->execute(), $this->admin, $this->response->getDataByKey("baseUrl")));
         }
         else {
             $controller = new \LwEvents\Domain\Event\Teaser($this->response, $this->request);
             $view = new \LwEvents\Views\Teaser();
-            $this->response->setOutputByKey("lw_events_".$plugindata["oid"], $view->render($controller->execute()));
+            $this->response->setOutputByKey("lw_events_".$plugindata["oid"], $view->render($controller->execute(), false, $this->response->getDataByKey("baseUrl")));
         }
     }
 
@@ -80,7 +80,7 @@ class EventsController extends \lw_object
         $commandHandler->deleteEntry($id);
         $commandHandler->deleteLogo($id);
 
-        \LwEvents\Services\Page::reload(\LwEvents\Services\Page::getUrl());
+        \LwEvents\Services\Page::reload($this->response->getDataByKey("baseUrl"));
     }
 
 }
