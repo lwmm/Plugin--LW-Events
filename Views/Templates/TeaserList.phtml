@@ -79,16 +79,6 @@
         <script type="text/javascript" src="http://www.bio.nrw.de/c_media/yui-calendar/js/yahoo-dom-event.js"></script>
 
         <script type="text/javascript" src="http://www.bio.nrw.de/c_media/yui-calendar/js/calendar-min.js"></script>
-        <script>
-            function mySelectHandler(type, args, obj) {
-                var selected = args[0];
-                var selDate = selected[0];
-
-                var url = '/index.php?index=51&selectedDay=' + selDate;
-                document.location.href = url;
-            }
-            ;
-        </script>
         <div id="hiddenCalElement">
             <div id="item_new" class="calelement">
                 <h2>DATUM</h2>
@@ -203,6 +193,9 @@
         else {
             echo "mehr";
         } ?>');
+                        if(urltype === 'extern'){
+                            $('#item_' + i + '.calelement h1 span a').attr('target', '_blank');
+                        }
                         $('#item_' + i + '.calelement h1 span a').attr('href', url);
                         $('#item_' + i + '.calelement h1 span a').addClass(urltype);
                     }
@@ -213,19 +206,6 @@
                 } else {
                     $('#infobox').hide();
                 }
-            }
-
-            function myChangePageHandler(type, args, obj) {
-                var d = args[1];
-                var y = d.getFullYear();
-                var m = d.getMonth() + 1;
-                var s = m + ":" + y;
-
-                var url = "/index.php?index=51&ajax=1&month=" + m + "&year=" + y;
-
-                $.get(url, function(data) {
-                    document.getElementById('calendar_events_for_current_month').innerHTML = data;
-                });
             }
 
             YAHOO.example.calendar.init = function() {
@@ -270,9 +250,6 @@
             ?>", YAHOO.example.calendar.cal1.renderCellStyleHighlight1);
         <?php endforeach; ?>
                 YAHOO.example.calendar.cal1.render();
-
-                YAHOO.example.calendar.cal1.changePageEvent.subscribe(myChangePageHandler, YAHOO.example.calendar.cal1, true);
-                YAHOO.example.calendar.cal1.selectEvent.subscribe(mySelectHandler, YAHOO.example.calendar.cal1, true);
             };
 
             YAHOO.util.Event.onDOMReady(YAHOO.example.calendar.init);
