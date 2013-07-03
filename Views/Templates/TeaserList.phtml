@@ -140,11 +140,13 @@
                 var myDate = new Date(selDate);
 
                 var y = String(myDate.getFullYear());
-                if (myDate.getMonth() < 10) {
-                    var m = "0" + String(myDate.getMonth() + 1);
+                var monat = myDate.getMonth() + 1;
+                if (monat < 10) {
+                    var m = "0" + String(monat);
                 } else {
-                    var m = String(myDate.getMonth() + 1);
+                    var m = String(monat);
                 }
+                
                 if (myDate.getDate() < 10) {
                     var d = "0" + String(myDate.getDate());
                 } else {
